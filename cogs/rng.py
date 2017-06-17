@@ -23,8 +23,8 @@ class RNG():
     @commands.command()
     async def roll(self, message: str = "1d6"):
         """
-            Displays a random d6 value.
-            Uses XdY dice notation (maximum 20 dice) as the argument, otherwise rolls a single d6
+            Rolls a die or a set of dice using dice notation XdY.
+            Uses XdY dice notation (maximum 20 dice) as the argument, otherwise rolls a single d6.
             Examples: !roll | !roll 3d10 | !roll 10D4
         """
         pattern = regex.compile('^(\d+)(d|D)(\d+)$')
@@ -58,10 +58,10 @@ class RNG():
 
 
     #error handler for the poot command
-    # @roll.error
-    # async def roll_error(self, exc, ctx):
-    #     if isinstance(exc, commands.BadArgument):
-    #         await self.bot.send_message(ctx.message.channel,'"{0}" is not a valid integer.'.format(ctx.message.content[6:]))
+    @roll.error
+    async def roll_error(self, exc, ctx):
+        if isinstance(exc, commands.BadArgument):
+            await self.bot.send_message(ctx.message.channel,'"{0}" is not a valid integer.'.format(ctx.message.content[6:]))
 
     @commands.command(pass_context=True)
     async def poot(self, ctx, member: discord.Member = None):
@@ -76,7 +76,7 @@ class RNG():
         result = random.choice([
             'is the king of poots! :crown:',
             'is the biggest poot in the world! :earth_africa:',
-            'is a massive poot! :japanese_goblin:'
+            'is a massive poot! :japanese_goblin:',
             'is a big poot! :open_mouth:',
             'is a bit of a poot! :rolling_eyes:',
             'is probably a poot! :thinking:',
@@ -87,7 +87,6 @@ class RNG():
         ])
 
         await self.bot.say('{0}'.format(member) + result)
-
 
 def setup(bot):
     bot.add_cog(RNG(bot))
