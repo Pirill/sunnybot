@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 import random
 import re as regex
 
@@ -23,7 +24,7 @@ class RNG():
     async def roll(self, message: str = "1d6"):
         """
             Displays a random d6 value.
-            Optional parameter allows for rolling dice using XdY dice notation (maximum 20 dice)
+            Uses XdY dice notation (maximum 20 dice) as the argument, otherwise rolls a single d6
             Examples: !roll | !roll 3d10 | !roll 10D4
         """
         pattern = regex.compile('^(\d+)(d|D)(\d+)$')
@@ -61,6 +62,31 @@ class RNG():
     # async def roll_error(self, exc, ctx):
     #     if isinstance(exc, commands.BadArgument):
     #         await self.bot.send_message(ctx.message.channel,'"{0}" is not a valid integer.'.format(ctx.message.content[6:]))
+
+    @commands.command(pass_context=True)
+    async def poot(self, ctx, member: discord.Member = None):
+        """
+            Tells you whether the user is a poot or not.
+            Uses a member as the argument, otherwise uses the message sender as the argument.
+            Example usage: !poot | !poot Sunnybot
+        """
+        if member is None:
+            member = ctx.message.author
+
+        result = random.choice([
+            'is the king of poots! :crown:',
+            'is the biggest poot in the world! :earth_africa:',
+            'is a massive poot! :japanese_goblin:'
+            'is a big poot! :open_mouth:',
+            'is a bit of a poot! :rolling_eyes:',
+            'is probably a poot! :thinking:',
+            '\'s poot level is uncertain! :thinking:',
+            'is unlikely to be a poot! :thinking:',
+            'is not a poot! :x:',
+            'is definitely never going to be a poot! :innocent:'
+        ])
+
+        await self.bot.say('{0}'.format(member) + result)
 
 
 def setup(bot):
